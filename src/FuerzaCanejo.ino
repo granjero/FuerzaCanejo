@@ -82,7 +82,7 @@ RTC_DS1307 RTC; // inicialioza en RTC la libreria del reloj
 Adafruit_BMP085 BMP; // inicializa en BMP la libreria del sensor de presion
 
 //SETUP
-void setup() 
+void setup()
 {
   Wire.begin();
   RTC.begin();
@@ -96,10 +96,10 @@ void setup()
 }
 
 void loop() {
-  
+
   //muestra las instrucciones
   if(strCompleto && strSerial == "0\r")
-  { 
+  {
     limpiaPant();
     instrucciones();
     delay(2000);
@@ -109,8 +109,8 @@ void loop() {
     bandera = 0;
     strSerial = "";
     strCompleto = false;
-  } 
-  
+  }
+
   //juega
   if(strCompleto && strSerial == "1\r")
   {
@@ -120,7 +120,7 @@ void loop() {
     strSerial = "";
     strCompleto = false;
   }
-  
+
   if(strCompleto && bandera == 1)
   {
     limpiaPant();
@@ -139,27 +139,27 @@ void loop() {
     delay(1000);
     Serial.println(F("SOOOOOOOPLE CANEJO!!!!!!!!!!"));
     tone(11,2400, 200);
-    
+
     for (int i = 0; i < 450; i++)
     {
       tono++;
-      tone(11, tono, 15);  
+      tone(11, tono, 15);
       delay(1);
-    }   
+    }
     presion0 = BMP.readPressure(); //a presion le asigna el valor de bmp.readPreassure que se fuerza a float para que ela division por 100 ande bien
-    
+
     for (int i = 0; i < 450; i++)
     {
       tono++;
-      tone(11, tono, 15);  
+      tone(11, tono, 15);
       delay(1);
     }
     presion1 = BMP.readPressure(); //a presion le asigna el valor de bmp.readPreassure que se fuerza a float para que ela division por 100 ande bien
-    
+
     for (int i = 0; i < 450; i++)
     {
       tono++;
-      tone(11, tono, 15);  
+      tone(11, tono, 15);
       delay(1);
     }
     presion2 = BMP.readPressure(); //a presion le asigna el valor de bmp.readPreassure que se fuerza a float para que ela division por 100 ande bien
@@ -178,12 +178,12 @@ void loop() {
     record = decideRecord( (float)presion, leeMEM(pagina1).toFloat(), leeMEM(pagina4).toFloat(), leeMEM(pagina7).toFloat(), leeMEM(pagina10).toFloat(), leeMEM(pagina13).toFloat()   );
 
     limpiaPant();
-    
+
     Serial.print(F("\nHiciste "));
     Serial.print(presion);
     Serial.println(F(" Puntos "));
     Serial.println();
-    
+
     if (record < 6)
     {
       Serial.print(F("Quedaste en el puesto: "));
@@ -195,15 +195,15 @@ void loop() {
       Serial.println(F("\nNo hay lugar para vos en el podio... Mas fuerza la próxima "));
     }
     Serial.println();
-    
+
     ordenaRecords(record, strSerial, (String)presion, leeRelojStr());
-    
+
     //escribePagMEM(pagina0, strSerial);
     //escribePagMEM(pagina1, (String)presion);
     //escribePagMEM(pagina2, leeRelojStr());
-    
+
     //Serial.println(lineaRecordMEM);
-    
+
     bandera = 0;
     //strSerial == "2\r";
     strSerial = "";
@@ -211,8 +211,8 @@ void loop() {
 
     menu();
   }
-  
-  //muestra los records 
+
+  //muestra los records
   if(strCompleto && strSerial == "2\r")
   {
     limpiaPant();
@@ -225,7 +225,7 @@ void loop() {
     getPuntajeRecord(leeMEM(pagina1));
     Serial.print(F("  Fecha: "));
     getFechaRecord(leeMEM(pagina2));
-    
+
     //lee pagina 1
     //Serial.println(leeMEM(pagina1));
     Serial.println();
@@ -235,7 +235,7 @@ void loop() {
     getPuntajeRecord(leeMEM(pagina4));
     Serial.print(F("  Fecha: "));
     getFechaRecord(leeMEM(pagina5));
-    
+
     //lee pagina 2
     //Serial.println(leeMEM(pagina2));
     Serial.println();
@@ -245,7 +245,7 @@ void loop() {
     getPuntajeRecord(leeMEM(pagina7));
     Serial.print(F("  Fecha: "));
     getFechaRecord(leeMEM(pagina8));
-    
+
     //lee pagina 3
     //Serial.println(leeMEM(pagina3));
     Serial.println();
@@ -255,7 +255,7 @@ void loop() {
     getPuntajeRecord(leeMEM(pagina10));
     Serial.print(F("  Fecha: "));
     getFechaRecord(leeMEM(pagina11));
-    
+
     //lee pagina 4
     //Serial.println(leeMEM(pagina4));
     Serial.println();
@@ -265,22 +265,22 @@ void loop() {
     getPuntajeRecord(leeMEM(pagina13));
     Serial.print(F("  Fecha: "));
     getFechaRecord(leeMEM(pagina14));
-    
+
     Serial.println();
     Serial.println();
     menu();
-    
+
     bandera = 0;
     strSerial = "";
     strCompleto = false;
   }
-  
+
   //borra todos los records
   if(strCompleto && strSerial == "3\r")
   {
     limpiaPant();
     Serial.println(F("Borrando Records... (cobarde)"));
-    
+
     escribePagMEM(pagina0, "Sin Nombre");
     escribePagMEM(pagina1, "0");
     escribePagMEM(pagina2, leeRelojStr());
@@ -305,12 +305,12 @@ void loop() {
     limpiaPant();
     logo();
     menu();
-    
+
     bandera = 0;
     strSerial = "";
     strCompleto = false;
   }
-  
+
   // setear reloj
   if(strCompleto && strSerial == "4\r")
   {
@@ -319,8 +319,8 @@ void loop() {
     bandera = 4;
     strSerial = "";
     strCompleto = false;
-  } 
-  
+  }
+
   if (strCompleto && bandera == 4)
   {
     diaStr = "";
@@ -332,29 +332,29 @@ void loop() {
     diaStr += (String)strSerial[0];
     diaStr += (String)strSerial[1];
     dia = diaStr.toInt();
-    
+
     mesStr += (String)strSerial[3];
     mesStr += (String)strSerial[4];
     mes = mesStr.toInt();
-    
+
     anoStr += (String)strSerial[6];
     anoStr += (String)strSerial[7];
     anoStr += (String)strSerial[8];
     anoStr += (String)strSerial[9];
     ano = anoStr.toInt();
-    
+
     horaStr += (String)strSerial[11];
     horaStr += (String)strSerial[12];
     hora = horaStr.toInt();
-    
+
     minutoStr += (String)strSerial[14];
     minutoStr += (String)strSerial[15];
     minuto = minutoStr.toInt();
-    
+
     segundoStr += (String)strSerial[17];
     segundoStr += (String)strSerial[18];
     segundo = segundoStr.toInt();
-    
+
     setReloj(dia, mes, ano, hora, minuto, segundo);
 
     Serial.println(F("\nReloj seteado a:"));
@@ -369,7 +369,7 @@ void loop() {
     Serial.print(minuto);
     Serial.print(F(":"));
     Serial.println(segundo);
-    
+
     delay(4000);
     limpiaPant();
     logo();
@@ -379,7 +379,7 @@ void loop() {
     strSerial = "";
     strCompleto = false;
   }
-  
+
   //lee reloj
   if(strCompleto && strSerial == "5\r")
   {
@@ -393,16 +393,16 @@ void loop() {
     strSerial = "";
     strCompleto = false;
   }
-  
+
   //comprueba sensor Presion
   if(strCompleto && strSerial == "6\r")
   {
     limpiaPant();
-    if (!BMP.begin()) 
-    { 	
+    if (!BMP.begin())
+    {
       Serial.println(F("No se encuentra el modulo BMP180 chequear los cables"));
     }
-    
+
     else
     {
       presion0 = (float)BMP.readPressure()/100; //a presion le asigna el valor de bmp.readPreassure que se fuerza a float para que ela division por 100 ande bien
@@ -417,11 +417,11 @@ void loop() {
     bandera = 0;
     strSerial = "";
     strCompleto = false;
-  }  
-  
+  }
+
   //escribe en la memoria
   if(strCompleto && strSerial != "l\r")
-  { 
+  {
     Serial.println(F("\nEscritura... "));
     Serial.println(strSerial);
     escribePagMEM(pagina15, "300000");
@@ -431,12 +431,13 @@ void loop() {
     escribePagMEM(pagina19, "80000");
     strSerial = "";
     strCompleto = false;
-  } 
+  }
 
   //lee paginas de la memoria
   if(strCompleto && strSerial == "l\r")
   {
     Serial.println(F("Lectura:"));
+/*
     Serial.println(leeMEM(pagina0));
     Serial.println(leeMEM(pagina1));
     Serial.println(leeMEM(pagina2));
@@ -458,7 +459,11 @@ void loop() {
     Serial.println(leeMEM(pagina18));
     Serial.println(leeMEM(pagina19));
     Serial.println(leeMEM(pagina20));
-    
+  */
+    for (i = 0; i <= 8192; i = i +32 )
+    {
+      Serial.println(leeMEM(i));
+    }
     strSerial = "";
     strCompleto = false;
   }
@@ -468,12 +473,12 @@ void loop() {
 
 /*
  * interrupcion serial
- * carga en charSerial lo que 
+ * carga en charSerial lo que
  * entra por el serie
  */
-void serialEvent() 
+void serialEvent()
 {
-  while (Serial.available()) 
+  while (Serial.available())
   {
     // agarra el byte
     char charSerial = (char)Serial.read();
@@ -483,7 +488,7 @@ void serialEvent()
     strSerial += charSerial;
     // cuando llega u RC setea la bandera
     // para que active algo en el loop
-    if (charSerial == '\r') 
+    if (charSerial == '\r')
     {
       strCompleto = true;
     }
@@ -494,33 +499,33 @@ void serialEvent()
  * escribe en la memoria 24c32
  * recibe la direccion de la memoria
  * y el byte de dato
- * 
+ *
  */
 void escribeMEM (int direccion, byte data)
 {
-  //transforma direccion en los dos address byte direccion 
+  //transforma direccion en los dos address byte direccion
   byte BYTE_1 = direccion >> 8;
-  byte BYTE_2 = direccion - (BYTE_1 << 8); 
+  byte BYTE_2 = direccion - (BYTE_1 << 8);
 
   Wire.beginTransmission(MEMdir);
   Wire.write(BYTE_1);
   Wire.write(BYTE_2);
   Wire.write(data);
   Wire.endTransmission();
-  delay(10); 
+  delay(10);
 }
 
 /*
  * escribe una pagina en la memoria 24c32
  * recibe la direccion de la memoria
  * y el string de  dato
- * 
+ *
  */
 void escribePagMEM (int direccion, String data)
 {
   for (int i = 0; i < 32; i++)
     {
-      escribeMEM(direccion,data[i]);  
+      escribeMEM(direccion,data[i]);
       direccion++;
     }
 }
@@ -528,7 +533,7 @@ void escribePagMEM (int direccion, String data)
 /*
  * lee la memoria 24c32
  * recibe la direccion de la memoria
- * y devuelve el String de la pagina de esa 
+ * y devuelve el String de la pagina de esa
  * direccion
  */
 String leeMEM (int direccion)
@@ -538,7 +543,7 @@ String leeMEM (int direccion)
   paginaDeMemoriaR = "";
   byte data;
   byte BYTE_1 = direccion >> 8;
-  byte BYTE_2 = direccion - (BYTE_1 << 8); 
+  byte BYTE_2 = direccion - (BYTE_1 << 8);
   Wire.beginTransmission(MEMdir);
   Wire.write(BYTE_1);
   Wire.write(BYTE_2);
@@ -556,7 +561,7 @@ String leeMEM (int direccion)
 
 /*
  * setea el reloj
- * recibe los datos y setea 
+ * recibe los datos y setea
  */
 void setReloj(int dia, int mes, int ano, int hora, int minutos, int segundos)
 {
@@ -574,11 +579,11 @@ void setReloj(int dia, int mes, int ano, int hora, int minutos, int segundos)
 
 /*
  * lee el reloj
- * recibe los datos y setea 
+ * recibe los datos y setea
  */
 void leeReloj()
 {
-  DateTime now = RTC.now();   
+  DateTime now = RTC.now();
   Serial.print(F("\nFECHA "));
   if(now.day() < 10)
   {
@@ -623,8 +628,8 @@ String leeRelojStr()
   String fechaHoraStrR;
   fechaHoraStrR.reserve(14);
   fechaHoraStrR = ""; // vacia el string
-  DateTime now = RTC.now();   
-  
+  DateTime now = RTC.now();
+
   //FECHA
   if(now.day() < 10)
   {
@@ -635,9 +640,9 @@ String leeRelojStr()
   {
     fechaHoraStrR += "0";
   }
-  fechaHoraStrR += (String)now.month();  
+  fechaHoraStrR += (String)now.month();
   fechaHoraStrR += (String)now.year();
-  //HORA 
+  //HORA
   if(now.hour() < 10)
   {
     fechaHoraStrR += "0";
@@ -647,7 +652,7 @@ String leeRelojStr()
   {
     fechaHoraStrR += "0";
   }
-  fechaHoraStrR += (String)now.minute();  
+  fechaHoraStrR += (String)now.minute();
   if(now.second() < 10)
   {
     fechaHoraStrR += "0";
@@ -660,17 +665,17 @@ String leeRelojStr()
 /*
  * pasa de un numero en BCD al quivalente en BIN
  */
-byte bcd2bin (byte val) 
-{ 
-  return val - 6 * (val >> 4); 
+byte bcd2bin (byte val)
+{
+  return val - 6 * (val >> 4);
 }
 
 /*
  * pasa de un numero en BIN al equivalente en BCD
  */
-byte bin2bcd (byte val) 
-{ 
-  return val + 6 * (val / 10); 
+byte bin2bcd (byte val)
+{
+  return val + 6 * (val / 10);
 }
 
 /*
@@ -691,8 +696,8 @@ void menu()
   Serial.println(F("2. Records"));
   Serial.println(F("3. Borrar Records"));
   Serial.println(F("4. Setear Reloj"));
-  Serial.println(F("5. Leer Reloj")); 
-  Serial.println(F("6. Comprobar Sensor de Presion")); 
+  Serial.println(F("5. Leer Reloj"));
+  Serial.println(F("6. Comprobar Sensor de Presion"));
 }
 
 /*
@@ -741,7 +746,7 @@ void getFechaRecord(String record)
   fechaR += ":";
   fechaR += record[12];
   fechaR += record[13];
-  
+
   Serial.println(fechaR);
 }
 
@@ -751,7 +756,7 @@ void getFechaRecord(String record)
 void getPuntajeRecord(String record)
 {
   String puntajeR;
-  puntajeR.reserve(32);  
+  puntajeR.reserve(32);
   puntajeR = "";
   puntajeR += record[0];
   puntajeR += record[1];
@@ -785,7 +790,7 @@ void getPuntajeRecord(String record)
   puntajeR += record[29];
   puntajeR += record[30];
   puntajeR += record[31];
-  
+
   Serial.println(puntajeR);
 }
 
@@ -795,7 +800,7 @@ void getPuntajeRecord(String record)
 void getNombreRecord(String record)
 {
   String nombreR;
-  nombreR.reserve(32);  
+  nombreR.reserve(32);
   nombreR = "";
   nombreR += record[0];
   nombreR += record[1];
@@ -829,7 +834,7 @@ void getNombreRecord(String record)
   nombreR += record[29];
   nombreR += record[30];
   nombreR += record[31];
-  
+
   Serial.println(nombreR);
 }
 
@@ -855,12 +860,12 @@ void getNombreRecord(String record)
  * decide si es record
  */
  int decideRecord(float presion, float uno, float dos, float tres, float cuatro, float cinco)
- {  
+ {
   if (presion > uno)
   {
     return 1;
   }
-  
+
   if (presion > dos)
   {
     return 2;
@@ -870,7 +875,7 @@ void getNombreRecord(String record)
   {
     return 3;
   }
-  
+
   if (presion > cuatro)
   {
     return 4;
@@ -880,7 +885,7 @@ void getNombreRecord(String record)
   {
     return 5;
   }
-  
+
   if (presion <= cinco)
   {
     return 99;
@@ -917,7 +922,7 @@ void getNombreRecord(String record)
     //Graba el 1
     escribePagMEM(pagina0, nombre);
     escribePagMEM(pagina1, puntos);
-    escribePagMEM(pagina2, fecha);    
+    escribePagMEM(pagina2, fecha);
   }
 
     if (posicion == 2)
@@ -940,9 +945,9 @@ void getNombreRecord(String record)
     //Graba el 2
     escribePagMEM(pagina3, nombre);
     escribePagMEM(pagina4, puntos);
-    escribePagMEM(pagina5, fecha);   
+    escribePagMEM(pagina5, fecha);
   }
-  
+
     if (posicion == 3)
   {
     //Baja el 4 al 5
@@ -971,7 +976,7 @@ void getNombreRecord(String record)
     //Graba el 4
     escribePagMEM(pagina9, nombre);
     escribePagMEM(pagina10, puntos);
-    escribePagMEM(pagina11, fecha);   
+    escribePagMEM(pagina11, fecha);
   }
 
     if (posicion == 5)
@@ -981,6 +986,5 @@ void getNombreRecord(String record)
     escribePagMEM(pagina13, puntos);
     escribePagMEM(pagina14, fecha);
   }
-  
- }
 
+ }
