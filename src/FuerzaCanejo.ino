@@ -597,7 +597,7 @@ byte bin2bcd (byte val)
  */
 void logo()
 {
-  Serial.println(F("         _________\n\r         |        |\n\r     ____|________|____\n\r        //// _____)\n\r        _|   (o)(o)\n\r       (o        \\|\n\r         |     (..)\n\r         |    /||||\\ \n\r         | \\     \\\\ \n\r         |  ---- _\\\\_ \n\r                /    \\\n\r   ____________|      |_______   SOPLE CANEJO!!!\n\r                \\    /\n\r                 \\__/\n\r"));
+  Serial.println(F("         _________\n\r         |        |\n\r     ____|________|____\n\r        //// _____)\n\r        _|   (o)(o)\n\r       (o        \\|\n\r         |     (..)              FUERZA CANEJO!!!\n\r         |    /||||\\ \n\r         | \\     /\n\r         |  -----  \n\r"));
 }
 
 /*
@@ -619,7 +619,7 @@ void menu()
  */
  void instrucciones()
  {
-   Serial.print(F("\nSoplar fuerte y ganar\n\r"));
+   Serial.print(F("\nPosicionar el embolo sobre la linea de partida\n\rCuando sea el momento presionar el embolo fuerte y ganar\n\r"));
  }
 
 /*
