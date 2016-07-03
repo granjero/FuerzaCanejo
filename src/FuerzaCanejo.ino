@@ -43,13 +43,7 @@
 
 //VARIABLES
 String strSerial = ""; // va a recibir lo que venga por serie
-//String paginaDeMemoria = ""; // va a recibir lo que se lee de la memoria
 int bandera = 0; //va a tener el dato que va a hacer que entre en un if u otro del loop
-//String lineaRecordMEM = ""; //va a tener el contenido de una RECORD para guardar lo en memoria
-//String fechaHoraStr = ""; // va a tener un strng con la fecha y la hora DDMMYYYYhhmmss
-//String nombre = "";
-//String fecha = "";
-//String puntaje = "";
 
 boolean strCompleto = false;  //bandera
 
@@ -70,6 +64,7 @@ int ano;
 String anoStr;
 
 long presion;
+long presionLeida[4]; //variable para almacenar la presion leida por el sensor
 long presion0; //variable para almacenar la presion leida por el sensor
 long presion1; //variable para almacenar la presion leida por el sensor
 long presion2; //variable para almacenar la presion leida por el sensor
@@ -104,6 +99,7 @@ void loop() {
     instrucciones();
     delay(2000);
     limpiaPant();
+    leeReloj();
     logo();
     menu();
     bandera = 0;
@@ -115,7 +111,10 @@ void loop() {
   if(strCompleto && strSerial == "1\r")
   {
     limpiaPant();
-    Serial.print(F("\nIngrese su Nombre (hasta 32 caracteres)"));
+    Serial.println(F("\nChequear que el embolo este en la marca negra"));
+    Serial.println(F("\n/ / / / / / / / / / / / / / / / / / / "));
+    Serial.println(F("______________________________________"));
+    Serial.println(F("\n\nIngrese su Nombre (hasta 32 caracteres)"));
     bandera = 1;
     strSerial = "";
     strCompleto = false;
@@ -124,22 +123,35 @@ void loop() {
   if(strCompleto && bandera == 1)
   {
     limpiaPant();
-    Serial.print(F("\n\n\n\rAijuuuna Don "));
     Serial.println(strSerial);
     Serial.println(F("Preparado en..."));
     delay(1800);
-    Serial.println(F("3"));
-    tone(11,1300, 200);
-    delay(1000);
-    Serial.println(F("2"));
-    tone(11,1300, 200);
-    delay(1000);
-    Serial.println(F("1"));
-    tone(11,1300, 200);
-    delay(1000);
-    Serial.println(F("SOOOOOOOPLE CANEJO!!!!!!!!!!"));
+
+    for (int i = 3; i > 0; i--)
+    {
+      Serial.println(i);
+      tone(11,1300, 200);
+      delay(1000);
+    }
+
     tone(11,2400, 200);
 
+    Serial.println(F("FUEEERRRRRRRZAAAAAAAAAAAAAA CANEJO!!!!!!!!!!"));
+
+    for (int i = 0; i < 4; i++)
+    {
+      for (int i = 0; i < 450; i++)
+      {
+        tono++;
+        tone(11, tono, 15);
+        delay(1);
+      }
+      presionLeida[i]= BMP.readPressure(); //a presion le asigna el valor de bmp.readPreassure que se fuerza a float para que ela division por 100 ande bien
+    }
+    noTone(11);
+
+
+    /*
     for (int i = 0; i < 450; i++)
     {
       tono++;
@@ -165,13 +177,13 @@ void loop() {
     presion2 = BMP.readPressure(); //a presion le asigna el valor de bmp.readPreassure que se fuerza a float para que ela division por 100 ande bien
 
     noTone(11);
-    /*
-    Serial.println(leeMEM(pagina1));
-    Serial.println(leeMEM(pagina4));
-    Serial.println(leeMEM(pagina7));
-    Serial.println(leeMEM(pagina10));
-    Serial.println(leeMEM(pagina13));
+
     */
+    presion0 = presionLeida[0];
+    presion1 = presionLeida[1];
+    presion2 = presionLeida[2];
+    presion3 = presionLeida[3];
+
     presion = decideMayor(presion0, presion1, presion2);
 
     //int decideRecord(long presion,long uno, long dos, long tres, long cuatro, long cinco)
@@ -460,7 +472,7 @@ void loop() {
     Serial.println(leeMEM(pagina19));
     Serial.println(leeMEM(pagina20));
   */
-    for (i = 0; i <= 8192; i = i +32 )
+    for (int i = 0; i <= 8192; i = i +32 )
     {
       Serial.println(leeMEM(i));
     }
