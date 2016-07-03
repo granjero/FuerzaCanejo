@@ -70,7 +70,7 @@ long presion1; //variable para almacenar la presion leida por el sensor
 long presion2; //variable para almacenar la presion leida por el sensor
 //long presion3; //variable para almacenar la presion leida por el sensor
 
-int record = 0;
+int puesto = 0;
 
 int pag = 0;
 
@@ -129,6 +129,7 @@ void loop() {
     Serial.println(F("Preparado en..."));
     delay(1800);
 
+    //hace la cuenta regresiva 3 2 1
     for (int i = 3; i > 0; i--)
     {
       Serial.println(i);
@@ -139,7 +140,7 @@ void loop() {
     tone(11,2400, 200);
 
     Serial.println(F("FUEEERRRRRRRZAAAAAAAAAAAAAA CANEJO!!!!!!!!!!"));
-
+    //toma las tres lecturas y hace el ruido de UUUUUUUUUuuuuuuiuiiiiiiiiii
     for (int i = 0; i < 3; i++)
     {
       for (int i = 0; i < 450; i++)
@@ -152,17 +153,19 @@ void loop() {
     }
     noTone(11);
 
-    presion0 = map(presionLeida[0], 100000, 105000, 0, 1000);
-    presion1 = map(presionLeida[1], 100000, 105000, 0, 1000);
-    presion2 = map(presionLeida[2], 100000, 105000, 0, 1000);
-    //presion3 = presionLeida[3];
+    //pasa a presion012 los valores de presion tomada pero con el rango achicado
+    presion0 = map(presionLeida[0], 100000, 115000, 0, 1000);
+    presion1 = map(presionLeida[1], 100000, 115000, 0, 1000);
+    presion2 = map(presionLeida[2], 100000, 115000, 0, 1000);
 
     //asigna a presion el valor de la mayor medidatomada
     presion = decideMayor(presion0, presion1, presion2);
-    //asigna a record la posicion en la que quedo el jugador
-    record = decideRecord( (float)presion, leeMEM(pagina1).toFloat(), leeMEM(pagina4).toFloat(), leeMEM(pagina7).toFloat(), leeMEM(pagina10).toFloat(), leeMEM(pagina13).toFloat()   );
+
+    //asigna a puesto la posicion en la que quedo el jugador
+    puesto = decidePuesto( (float)presion, leeMEM(pagina1).toFloat(), leeMEM(pagina4).toFloat(), leeMEM(pagina7).toFloat(), leeMEM(pagina10).toFloat(), leeMEM(pagina13).toFloat()   );
+
     //ordena en la memoria los records segun el valor de record
-    ordenaRecords(record, strSerial, (String)presion, leeRelojStr());
+    ordenaRecords(puesto, strSerial, (String)presion, leeRelojStr());
 
     limpiaPant();
 
@@ -171,10 +174,10 @@ void loop() {
     Serial.println(F(" Puntos "));
     Serial.println();
 
-    if (record < 6)
+    if (puesto < 6)
     {
       Serial.print(F("Quedaste en el puesto: "));
-      Serial.println(record);
+      Serial.println(puesto);
     }
 
     else
@@ -370,29 +373,7 @@ void loop() {
   if(strCompleto && strSerial == "l\r")
   {
     Serial.println(F("Lectura:"));
-/*
-    Serial.println(leeMEM(pagina0));
-    Serial.println(leeMEM(pagina1));
-    Serial.println(leeMEM(pagina2));
-    Serial.println(leeMEM(pagina3));
-    Serial.println(leeMEM(pagina4));
-    Serial.println(leeMEM(pagina5));
-    Serial.println(leeMEM(pagina6));
-    Serial.println(leeMEM(pagina7));
-    Serial.println(leeMEM(pagina8));
-    Serial.println(leeMEM(pagina9));
-    Serial.println(leeMEM(pagina10));
-    Serial.println(leeMEM(pagina11));
-    Serial.println(leeMEM(pagina12));
-    Serial.println(leeMEM(pagina13));
-    Serial.println(leeMEM(pagina14));
-    Serial.println(leeMEM(pagina15));
-    Serial.println(leeMEM(pagina16));
-    Serial.println(leeMEM(pagina17));
-    Serial.println(leeMEM(pagina18));
-    Serial.println(leeMEM(pagina19));
-    Serial.println(leeMEM(pagina20));
-  */
+
     for (int i = 0; i <= 8192; i = i +32 )
     {
       Serial.println(leeMEM(i));
@@ -792,7 +773,7 @@ void getNombreRecord(String record)
 /*
  * decide si es record
  */
- int decideRecord(float presion, float uno, float dos, float tres, float cuatro, float cinco)
+ int decidePuesto(float presion, float uno, float dos, float tres, float cuatro, float cinco)
  {
   if (presion > uno)
   {
@@ -919,5 +900,4 @@ void getNombreRecord(String record)
     escribePagMEM(pagina13, puntos);
     escribePagMEM(pagina14, fecha);
   }
-
  }
