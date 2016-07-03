@@ -68,9 +68,11 @@ long presionLeida[4]; //variable para almacenar la presion leida por el sensor
 long presion0; //variable para almacenar la presion leida por el sensor
 long presion1; //variable para almacenar la presion leida por el sensor
 long presion2; //variable para almacenar la presion leida por el sensor
-long presion3; //variable para almacenar la presion leida por el sensor
+//long presion3; //variable para almacenar la presion leida por el sensor
 
 int record = 0;
+
+int pag = 0;
 
 //INICIALIZA LIRERIAS
 RTC_DS1307 RTC; // inicialioza en RTC la libreria del reloj
@@ -138,7 +140,7 @@ void loop() {
 
     Serial.println(F("FUEEERRRRRRRZAAAAAAAAAAAAAA CANEJO!!!!!!!!!!"));
 
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 3; i++)
     {
       for (int i = 0; i < 450; i++)
       {
@@ -150,44 +152,17 @@ void loop() {
     }
     noTone(11);
 
+    presion0 = map(presionLeida[0], 100000, 105000, 0, 1000);
+    presion1 = map(presionLeida[1], 100000, 105000, 0, 1000);
+    presion2 = map(presionLeida[2], 100000, 105000, 0, 1000);
+    //presion3 = presionLeida[3];
 
-    /*
-    for (int i = 0; i < 450; i++)
-    {
-      tono++;
-      tone(11, tono, 15);
-      delay(1);
-    }
-    presion0 = BMP.readPressure(); //a presion le asigna el valor de bmp.readPreassure que se fuerza a float para que ela division por 100 ande bien
-
-    for (int i = 0; i < 450; i++)
-    {
-      tono++;
-      tone(11, tono, 15);
-      delay(1);
-    }
-    presion1 = BMP.readPressure(); //a presion le asigna el valor de bmp.readPreassure que se fuerza a float para que ela division por 100 ande bien
-
-    for (int i = 0; i < 450; i++)
-    {
-      tono++;
-      tone(11, tono, 15);
-      delay(1);
-    }
-    presion2 = BMP.readPressure(); //a presion le asigna el valor de bmp.readPreassure que se fuerza a float para que ela division por 100 ande bien
-
-    noTone(11);
-
-    */
-    presion0 = presionLeida[0];
-    presion1 = presionLeida[1];
-    presion2 = presionLeida[2];
-    presion3 = presionLeida[3];
-
+    //asigna a presion el valor de la mayor medidatomada
     presion = decideMayor(presion0, presion1, presion2);
-
-    //int decideRecord(long presion,long uno, long dos, long tres, long cuatro, long cinco)
+    //asigna a record la posicion en la que quedo el jugador
     record = decideRecord( (float)presion, leeMEM(pagina1).toFloat(), leeMEM(pagina4).toFloat(), leeMEM(pagina7).toFloat(), leeMEM(pagina10).toFloat(), leeMEM(pagina13).toFloat()   );
+    //ordena en la memoria los records segun el valor de record
+    ordenaRecords(record, strSerial, (String)presion, leeRelojStr());
 
     limpiaPant();
 
@@ -208,16 +183,7 @@ void loop() {
     }
     Serial.println();
 
-    ordenaRecords(record, strSerial, (String)presion, leeRelojStr());
-
-    //escribePagMEM(pagina0, strSerial);
-    //escribePagMEM(pagina1, (String)presion);
-    //escribePagMEM(pagina2, leeRelojStr());
-
-    //Serial.println(lineaRecordMEM);
-
     bandera = 0;
-    //strSerial == "2\r";
     strSerial = "";
     strCompleto = false;
 
@@ -228,60 +194,25 @@ void loop() {
   if(strCompleto && strSerial == "2\r")
   {
     limpiaPant();
-    //lee pagina 0
-    //Serial.println(leeMEM(pagina0));
-    //Serial.println();
-    Serial.print(F("1* "));
-    getNombreRecord(leeMEM(pagina0));
-    Serial.print(F("  Puntaje: "));
-    getPuntajeRecord(leeMEM(pagina1));
-    Serial.print(F("  Fecha: "));
-    getFechaRecord(leeMEM(pagina2));
 
-    //lee pagina 1
-    //Serial.println(leeMEM(pagina1));
-    Serial.println();
-    Serial.print(F("2* "));
-    getNombreRecord(leeMEM(pagina3));
-    Serial.print(F("  Puntaje: "));
-    getPuntajeRecord(leeMEM(pagina4));
-    Serial.print(F("  Fecha: "));
-    getFechaRecord(leeMEM(pagina5));
+    for(int i = 0; i < 5; i++)
+    {
+      Serial.print(i + 1);
+      Serial.print(F("* "));
+      getNombreRecord(leeMEM(pag));
+      Serial.print(F("  Puntaje: "));
+      pag = pag + 32;
+      getPuntajeRecord(leeMEM(pag));
+      Serial.print(F("  Fecha: "));
+      pag = pag + 32;
+      getFechaRecord(leeMEM(pag));
+      Serial.println();
+      pag = pag + 32;
+    }
 
-    //lee pagina 2
-    //Serial.println(leeMEM(pagina2));
-    Serial.println();
-    Serial.print(F("3* "));
-    getNombreRecord(leeMEM(pagina6));
-    Serial.print(F("  Puntaje: "));
-    getPuntajeRecord(leeMEM(pagina7));
-    Serial.print(F("  Fecha: "));
-    getFechaRecord(leeMEM(pagina8));
-
-    //lee pagina 3
-    //Serial.println(leeMEM(pagina3));
-    Serial.println();
-    Serial.print(F("4* "));
-    getNombreRecord(leeMEM(pagina9));
-    Serial.print(F("  Puntaje: "));
-    getPuntajeRecord(leeMEM(pagina10));
-    Serial.print(F("  Fecha: "));
-    getFechaRecord(leeMEM(pagina11));
-
-    //lee pagina 4
-    //Serial.println(leeMEM(pagina4));
-    Serial.println();
-    Serial.print(F("5* "));
-    getNombreRecord(leeMEM(pagina12));
-    Serial.print(F("  Puntaje: "));
-    getPuntajeRecord(leeMEM(pagina13));
-    Serial.print(F("  Fecha: "));
-    getFechaRecord(leeMEM(pagina14));
-
-    Serial.println();
     Serial.println();
     menu();
-
+    pag = 0;
     bandera = 0;
     strSerial = "";
     strCompleto = false;
@@ -293,27 +224,17 @@ void loop() {
     limpiaPant();
     Serial.println(F("Borrando Records... (cobarde)"));
 
-    escribePagMEM(pagina0, "Sin Nombre");
-    escribePagMEM(pagina1, "0");
-    escribePagMEM(pagina2, leeRelojStr());
+    for(int i = 0; i < 5; i++)
+    {
+      escribePagMEM(pag, "Sin Nombre");
+      pag = pag + 32;
+      escribePagMEM(pag, "0");
+      pag = pag + 32;
+      escribePagMEM(pag, leeRelojStr());
+      pag = pag + 32;
+    }
+    pag = 0;
 
-    escribePagMEM(pagina3, "Sin Nombre");
-    escribePagMEM(pagina4, "0");
-    escribePagMEM(pagina5, leeRelojStr());
-
-    escribePagMEM(pagina6, "Sin Nombre");
-    escribePagMEM(pagina7, "0");
-    escribePagMEM(pagina8, leeRelojStr());
-
-    escribePagMEM(pagina9, "Sin Nombre");
-    escribePagMEM(pagina10, "0");
-    escribePagMEM(pagina11, leeRelojStr());
-
-    escribePagMEM(pagina12, "Sin Nombre");
-    escribePagMEM(pagina13, "0");
-    escribePagMEM(pagina14, leeRelojStr());
-
-    //delay(1000);
     limpiaPant();
     logo();
     menu();
@@ -553,7 +474,7 @@ String leeMEM (int direccion)
   String paginaDeMemoriaR;
   paginaDeMemoriaR.reserve(32);
   paginaDeMemoriaR = "";
-  byte data;
+  //byte data;
   byte BYTE_1 = direccion >> 8;
   byte BYTE_2 = direccion - (BYTE_1 << 8);
   Wire.beginTransmission(MEMdir);
@@ -898,7 +819,7 @@ void getNombreRecord(String record)
     return 5;
   }
 
-  if (presion <= cinco)
+  else
   {
     return 99;
   }
