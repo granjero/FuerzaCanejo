@@ -634,9 +634,37 @@ void menu()
  */
 void getFechaRecord(String record)
 {
+  int i;
   String fechaR;
   fechaR.reserve(19);
   fechaR = "";
+  for (i = 0; i < 19; i++)
+  {
+    fechaR += record[i];
+    if (i == 1)
+    {
+      fechaR += "-";
+    }
+    if (i == 3)
+    {
+      fechaR += "-";
+    }
+    if (i == 7)
+    {
+      fechaR += " ";
+    }
+    if (i == 9)
+    {
+      fechaR += ":";
+    }
+    if (i == 11)
+    {
+      fechaR += ":";
+    }
+
+  }
+
+  /*
   fechaR += record[0];
   fechaR += record[1];
   fechaR += "-";
@@ -656,7 +684,7 @@ void getFechaRecord(String record)
   fechaR += ":";
   fechaR += record[12];
   fechaR += record[13];
-
+*/
   Serial.println(fechaR);
 }
 
@@ -691,42 +719,7 @@ void getNombreRecord(String record)
   for (i = 0; i < 32; i++)
   {
     nombreR += record[i];
-  }
-  /*
-  nombreR += record[0];
-  nombreR += record[1];
-  nombreR += record[2];
-  nombreR += record[3];
-  nombreR += record[4];
-  nombreR += record[5];
-  nombreR += record[6];
-  nombreR += record[7];
-  nombreR += record[8];
-  nombreR += record[9];
-  nombreR += record[10];
-  nombreR += record[11];
-  nombreR += record[12];
-  nombreR += record[13];
-  nombreR += record[14];
-  nombreR += record[15];
-  nombreR += record[16];
-  nombreR += record[17];
-  nombreR += record[18];
-  nombreR += record[19];
-  nombreR += record[20];
-  nombreR += record[21];
-  nombreR += record[22];
-  nombreR += record[23];
-  nombreR += record[24];
-  nombreR += record[25];
-  nombreR += record[26];
-  nombreR += record[27];
-  nombreR += record[28];
-  nombreR += record[29];
-  nombreR += record[30];
-  nombreR += record[31];
-  */
-  Serial.println(nombreR);
+  }  Serial.println(nombreR);
 }
 
 /*
