@@ -668,6 +668,12 @@ void getPuntajeRecord(String record)
   String puntajeR;
   puntajeR.reserve(32);
   puntajeR = "";
+
+  for (i = 0; i < 32; i++)
+  {
+    puntajeR += record[i];
+  }
+  /*
   puntajeR += record[0];
   puntajeR += record[1];
   puntajeR += record[2];
@@ -700,7 +706,7 @@ void getPuntajeRecord(String record)
   puntajeR += record[29];
   puntajeR += record[30];
   puntajeR += record[31];
-
+  */
   Serial.println(puntajeR);
 }
 
