@@ -665,6 +665,7 @@ void getFechaRecord(String record)
  */
 void getPuntajeRecord(String record)
 {
+  int i;
   String puntajeR;
   puntajeR.reserve(32);
   puntajeR = "";
@@ -673,40 +674,7 @@ void getPuntajeRecord(String record)
   {
     puntajeR += record[i];
   }
-  /*
-  puntajeR += record[0];
-  puntajeR += record[1];
-  puntajeR += record[2];
-  puntajeR += record[3];
-  puntajeR += record[4];
-  puntajeR += record[5];
-  puntajeR += record[6];
-  puntajeR += record[7];
-  puntajeR += record[8];
-  puntajeR += record[9];
-  puntajeR += record[10];
-  puntajeR += record[11];
-  puntajeR += record[12];
-  puntajeR += record[13];
-  puntajeR += record[14];
-  puntajeR += record[15];
-  puntajeR += record[16];
-  puntajeR += record[17];
-  puntajeR += record[18];
-  puntajeR += record[19];
-  puntajeR += record[20];
-  puntajeR += record[21];
-  puntajeR += record[22];
-  puntajeR += record[23];
-  puntajeR += record[24];
-  puntajeR += record[25];
-  puntajeR += record[26];
-  puntajeR += record[27];
-  puntajeR += record[28];
-  puntajeR += record[29];
-  puntajeR += record[30];
-  puntajeR += record[31];
-  */
+
   Serial.println(puntajeR);
 }
 
