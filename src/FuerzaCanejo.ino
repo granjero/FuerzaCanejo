@@ -44,7 +44,7 @@
 //VARIABLES
 String strSerial = ""; // va a recibir lo que venga por serie
 int bandera = 0; //va a tener el dato que va a hacer que entre en un if u otro del loop
-
+int banderaMenu = 0;
 boolean strCompleto = false;  //bandera
 
 int tono = 600; // para el ruido
@@ -95,11 +95,11 @@ void setup()
 void loop() {
 
   //muestra las instrucciones
-  if(strCompleto && strSerial == "0\r")
+  if(strCompleto && strSerial == "0\r" && banderaMenu == 0)
   {
     limpiaPant();
     instrucciones();
-    delay(2000);
+    delay(3000);
     limpiaPant();
     leeReloj();
     logo();
@@ -110,7 +110,7 @@ void loop() {
   }
 
   //juega
-  if(strCompleto && strSerial == "1\r")
+  if(strCompleto && strSerial == "1\r" && banderaMenu == 0)
   {
     limpiaPant();
     Serial.println(F("\nChequear que el embolo este en la marca negra"));
@@ -194,7 +194,7 @@ void loop() {
   }
 
   //muestra los records
-  if(strCompleto && strSerial == "2\r")
+  if(strCompleto && strSerial == "2\r" && banderaMenu == 0)
   {
     limpiaPant();
 
@@ -220,6 +220,130 @@ void loop() {
     strSerial = "";
     strCompleto = false;
   }
+
+  //menu opciones
+  if(strCompleto && strSerial == "3\r" && banderaMenu == 0)
+  {
+    limpiaPant();
+    menuOpciones();
+    banderaMenu = 1;
+    strSerial = "";
+    strCompleto = false;
+  }
+
+
+  if(strCompleto && strSerial == "1\r" && banderaMenu == 1)
+  {
+
+      limpiaPant();
+      Serial.println(F("Borrando Records... (cobarde)"));
+
+      for(int i = 0; i < 5; i++)
+      {
+        escribePagMEM(pag, "Sin Nombre");
+        pag = pag + 32;
+        escribePagMEM(pag, "0");
+        pag = pag + 32;
+        escribePagMEM(pag, leeRelojStr());
+        pag = pag + 32;
+      }
+      pag = 0;
+
+      limpiaPant();
+      logo();
+      menu();
+
+      bandera = 0;
+      banderaMenu = 0;
+      strSerial = "";
+      strCompleto = false;
+  }
+
+  if (strCompleto && strSerial == "2\r" && banderaMenu == 1)
+  {
+    limpiaPant();
+    leeReloj();
+    delay(2000);
+    limpiaPant();
+    logo();
+    menu();
+    bandera = 0;
+    banderaMenu = 0;
+    strSerial = "";
+    strCompleto = false;
+  }
+
+
+  if(strCompleto && strSerial == "3\r" && banderaMenu == 1)
+  {
+    limpiaPant();
+    Serial.print(F("\nSETEAR RELOJ\n\rIngrese la fecha y la hora con el siguiente formato:\n\rDD-MM-AAAA HH:MM:SS\n\rPor ejemplo:\n\r23-04-2016 13:45:55\n\r"));
+    banderaMenu = 3;
+    strSerial = "";
+    strCompleto = false;
+  }
+
+  if (strCompleto && banderaMenu == 3)
+  {
+    diaStr = "";
+    mesStr = "";
+    anoStr = "";
+    horaStr = "";
+    minutoStr = "";
+    segundoStr = "";
+    diaStr += (String)strSerial[0];
+    diaStr += (String)strSerial[1];
+    dia = diaStr.toInt();
+
+    mesStr += (String)strSerial[3];
+    mesStr += (String)strSerial[4];
+    mes = mesStr.toInt();
+
+    anoStr += (String)strSerial[6];
+    anoStr += (String)strSerial[7];
+    anoStr += (String)strSerial[8];
+    anoStr += (String)strSerial[9];
+    ano = anoStr.toInt();
+
+    horaStr += (String)strSerial[11];
+    horaStr += (String)strSerial[12];
+    hora = horaStr.toInt();
+
+    minutoStr += (String)strSerial[14];
+    minutoStr += (String)strSerial[15];
+    minuto = minutoStr.toInt();
+
+    segundoStr += (String)strSerial[17];
+    segundoStr += (String)strSerial[18];
+    segundo = segundoStr.toInt();
+
+    setReloj(dia, mes, ano, hora, minuto, segundo);
+
+    Serial.println(F("\nReloj seteado a:"));
+    Serial.print(dia);
+    Serial.print(F("-"));
+    Serial.print(mes);
+    Serial.print(F("-"));
+    Serial.print(ano);
+    Serial.print(F(" "));
+    Serial.print(hora);
+    Serial.print(F(":"));
+    Serial.print(minuto);
+    Serial.print(F(":"));
+    Serial.println(segundo);
+
+    delay(4000);
+    limpiaPant();
+    logo();
+    menu();
+
+    bandera = 0;
+    banderaMenu = 0;
+    strSerial = "";
+    strCompleto = false;
+  }
+
+/*
 
   //borra todos los records
   if(strCompleto && strSerial == "3\r")
@@ -354,6 +478,7 @@ void loop() {
     strSerial = "";
     strCompleto = false;
   }
+  */
 
   //escribe en la memoria
   if(strCompleto && strSerial != "l\r")
@@ -603,12 +728,26 @@ void menu()
 {
   Serial.println(F("0. Instrucciones"));
   Serial.println(F("1. Jugar"));
-  Serial.println(F("2. Records"));
-  Serial.println(F("3. Borrar Records"));
+  Serial.println(F("2. Ver Records"));
+  Serial.println(F("3. Opciones"));
+  /*
   Serial.println(F("4. Setear Reloj"));
   Serial.println(F("5. Leer Reloj"));
   Serial.println(F("6. Comprobar Sensor de Presion"));
+  */
 }
+
+/*
+ * menu Opciones
+ */
+void menuOpciones()
+{
+  Serial.println(F("1. Borrar Records"));
+  Serial.println(F("2. Leer Reloj"));
+  Serial.println(F("3. Setear Reloj"));
+  Serial.println(F("4. Comprobar Sensor de Presion"));
+}
+
 
 /*
  * Instrucciones del juego
@@ -661,30 +800,7 @@ void getFechaRecord(String record)
     {
       fechaR += ":";
     }
-
   }
-
-  /*
-  fechaR += record[0];
-  fechaR += record[1];
-  fechaR += "-";
-  fechaR += record[2];
-  fechaR += record[3];
-  fechaR += "-";
-  fechaR += record[4];
-  fechaR += record[5];
-  fechaR += record[6];
-  fechaR += record[7];
-  fechaR += " ";
-  fechaR += record[8];
-  fechaR += record[9];
-  fechaR += ":";
-  fechaR += record[10];
-  fechaR += record[11];
-  fechaR += ":";
-  fechaR += record[12];
-  fechaR += record[13];
-*/
   Serial.println(fechaR);
 }
 
