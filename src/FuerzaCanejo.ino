@@ -358,13 +358,9 @@ void loop() {
   //escribe en la memoria
   if(strCompleto && strSerial != "l\r")
   {
-    Serial.println(F("\nEscritura... "));
+    Serial.println(F("\nLas opciones validas son: 0, 1, 2, 3, 4, 5, y 6"));
+    Serial.println(F("\nIngresaste:  "));
     Serial.println(strSerial);
-    escribePagMEM(pagina15, "300000");
-    escribePagMEM(pagina16, "200000");
-    escribePagMEM(pagina17, "100000");
-    escribePagMEM(pagina18, "90000");
-    escribePagMEM(pagina19, "80000");
     strSerial = "";
     strCompleto = false;
   }
